@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c6n2a17d3rxnm"]
+[gd_scene load_steps=4 format=3 uid="uid://c6n2a17d3rxnm"]
 
 [ext_resource type="Script" uid="uid://k1do6k8ylald" path="res://battle_template/battle_template.gd" id="1_qxrgt"]
 [ext_resource type="Script" uid="uid://c6s0tlks5yfpt" path="res://battle_template/camera_rig.gd" id="2_xlxt2"]
+[ext_resource type="PackedScene" uid="uid://b0hue7n26b316" path="res://ui/ui.tscn" id="3_1krds"]
 
 [node name="BattleTemplate" type="Node3D"]
 script = ExtResource("1_qxrgt")
@@ -42,3 +43,5 @@ script = ExtResource("2_xlxt2")
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraRig"]
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig/SpringArm3D"]
+
+[node name="Ui" parent="CameraRig/SpringArm3D/Camera3D" instance=ExtResource("3_1krds")]
