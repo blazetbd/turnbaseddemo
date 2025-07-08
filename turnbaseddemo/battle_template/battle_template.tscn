@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c6n2a17d3rxnm"]
+[gd_scene load_steps=3 format=3 uid="uid://c6n2a17d3rxnm"]
 
 [ext_resource type="Script" uid="uid://k1do6k8ylald" path="res://battle_template/battle_template.gd" id="1_qxrgt"]
+[ext_resource type="Script" uid="uid://c6s0tlks5yfpt" path="res://battle_template/camera_rig.gd" id="2_xlxt2"]
 
 [node name="BattleTemplate" type="Node3D"]
 script = ExtResource("1_qxrgt")
@@ -34,3 +35,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00145853, 0, 0)
 
 [node name="Slot3" type="Marker3D" parent="Party"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.998056, 0, 0)
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("2_xlxt2")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraRig"]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/SpringArm3D"]
