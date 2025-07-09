@@ -2,12 +2,13 @@ extends Node3D
 
 
 var turn_queue: Array = []
-var curr_unit: Character
+var current_unit: Character
 
 var enemies: Array[Node3D] = []
 var party: Array[Node3D] = []
 var current_target_index: int = 0
 var current_target: Node3D = null
+var previous_target: Node3D = null
 
 var attacking: bool = false
 
@@ -72,23 +73,26 @@ func next_turn():
 		
 	var camera_rig = $CameraRig
 	print("Queue: " + str(turn_queue))
-	curr_unit = turn_queue.pop_front()
-	curr_unit.take_turn()
+	current_unit = turn_queue.pop_front()
+	current_unit.take_turn()
 	
-	if curr_unit.team == "enemy":
-		camera_rig.target_to_look_at = curr_unit
+	if current_unit.team == "enemy":
+		toggle_color(previous_target, Color.WHITE)
+		camera_rig.target_to_look_at = current_unit
 		await attack(party[0])
 		end_current_turn()
 	else:
 		print("Player turn!")
-		camera_rig.global_position = curr_unit.global_position
+		camera_rig.global_position = current_unit.global_position
 		camera_rig.global_position.y += 2
 		camera_rig.global_position.x += 2
 		camera_rig.target_to_look_at = current_target
+		toggle_color(current_target, Color.RED)
+		previous_target = current_target
 
 func end_current_turn():
 	print("End turn")
-	curr_unit.end_turn()
+	current_unit.end_turn()
 	next_turn()
 
 
@@ -102,18 +106,31 @@ func get_unit_order():
 func cycle_target(direction: int):
 	if enemies.size() == 0:
 		return
-
+	
+	if previous_target:
+		toggle_color(previous_target, Color.WHITE)
+		
 	current_target_index = (current_target_index + direction) % enemies.size()
 	current_target = enemies[current_target_index]
+	toggle_color(current_target, Color.RED)
 	print(current_target)
 	
 	var camera_rig = $CameraRig
 	camera_rig.target_to_look_at = current_target
+	
+	previous_target = current_target
+
+
+func toggle_color(target, color) -> void:
+	var mesh = target.model
+	var material = mesh.get_active_material(0)
+	
+	material.albedo_color = color
 
 
 func attack(target) -> void:
 	attacking = true
-	target.health -= curr_unit.attack
+	target.health -= current_unit.attack
 	print(target.team + ": " + str(target.health))
 	await get_tree().create_timer(3).timeout
 	attacking = false
