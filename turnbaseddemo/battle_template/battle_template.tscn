@@ -44,4 +44,6 @@ script = ExtResource("2_xlxt2")
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig/SpringArm3D"]
 
-[node name="Ui" parent="CameraRig/SpringArm3D/Camera3D" instance=ExtResource("3_1krds")]
+[node name="Ui" parent="." instance=ExtResource("3_1krds")]
+
+[editable path="Ui"]

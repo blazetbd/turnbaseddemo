@@ -9,6 +9,7 @@ var party: Array[Node3D] = []
 var current_target_index: int = 0
 var current_target: Node3D = null
 var previous_target: Node3D = null
+var previous_unit: Node3D = null
 
 var attacking: bool = false
 
@@ -67,31 +68,37 @@ func load_party() -> void:
 
 
 func next_turn():
-	print("Next turn")
+	print("[DEBUG] Next turn")
 	if turn_queue.is_empty():
 		turn_queue = get_unit_order()
-		
+	
+	reset_all_unit_colors()
+	
 	var camera_rig = $CameraRig
-	print("Queue: " + str(turn_queue))
+	print("[DEBUG] Queue: " + str(turn_queue))
 	current_unit = turn_queue.pop_front()
 	current_unit.take_turn()
 	
 	if current_unit.team == "enemy":
 		toggle_color(previous_target, Color.WHITE)
+		toggle_color(current_unit, Color.GREEN)
+	
 		camera_rig.target_to_look_at = current_unit
 		await attack(party[0])
 		end_current_turn()
 	else:
-		print("Player turn!")
+		print("[DEBUG] Player turn!")
 		camera_rig.global_position = current_unit.global_position
 		camera_rig.global_position.y += 2
 		camera_rig.global_position.x += 2
 		camera_rig.target_to_look_at = current_target
 		toggle_color(current_target, Color.RED)
+		toggle_color(current_unit, Color.GREEN)
 		previous_target = current_target
+		previous_unit = current_unit
 
 func end_current_turn():
-	print("End turn")
+	print("[DEBUG] End turn")
 	current_unit.end_turn()
 	next_turn()
 
@@ -99,7 +106,7 @@ func end_current_turn():
 func get_unit_order():
 	var all_units = get_tree().get_nodes_in_group("characters")
 	all_units.sort_custom(func(a,b): return a.speed > b.speed)
-	print(all_units)
+	print("[DEBUG] " +  str(all_units))
 	return all_units
 
 
@@ -113,7 +120,7 @@ func cycle_target(direction: int):
 	current_target_index = (current_target_index + direction) % enemies.size()
 	current_target = enemies[current_target_index]
 	toggle_color(current_target, Color.RED)
-	print(current_target)
+	print("[DEBUG] " + str(current_target))
 	
 	var camera_rig = $CameraRig
 	camera_rig.target_to_look_at = current_target
@@ -130,7 +137,26 @@ func toggle_color(target, color) -> void:
 
 func attack(target) -> void:
 	attacking = true
+	show_damage_number(current_unit.attack, target.global_position + Vector3.UP * 2)
 	target.health -= current_unit.attack
 	print(target.team + ": " + str(target.health))
 	await get_tree().create_timer(3).timeout
 	attacking = false
+
+
+func show_damage_number(damage: int, world_position: Vector3):
+	var scene = load("res://ui/damage_number.tscn")
+	var num = scene.instantiate()
+
+	var camera := get_viewport().get_camera_3d()
+	var screen_pos = camera.unproject_position(world_position)
+
+	var ui := $Ui/DamageLayer  # or wherever you store the damage numbers
+	ui.add_child(num)
+	num.start(damage, screen_pos)
+
+
+func reset_all_unit_colors():
+	var all_units = get_tree().get_nodes_in_group("characters")
+	for unit in all_units:
+		toggle_color(unit, Color.WHITE)
