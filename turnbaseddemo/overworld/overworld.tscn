@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3 uid="uid://clp4ouwy8euxd"]
+
+[ext_resource type="PackedScene" uid="uid://d2rbg8iloa6i3" path="res://overworld/characters/player.tscn" id="1_jv32c"]
+[ext_resource type="Texture2D" uid="uid://sf0y6yr2jf2s" path="res://dev_textures/texture_05.png" id="1_w0qnv"]
+[ext_resource type="PackedScene" uid="uid://cdkgkds7bpxpx" path="res://overworld/characters/enemy.tscn" id="3_criu7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jv32c"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_w0qnv"]
+sky_material = SubResource("ProceduralSkyMaterial_jv32c")
+
+[sub_resource type="Environment" id="Environment_criu7"]
+background_mode = 2
+sky = SubResource("Sky_w0qnv")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_criu7"]
+albedo_texture = ExtResource("1_w0qnv")
+uv1_triplanar = true
+
+[node name="Overworld" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_criu7")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Map" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.96338, 0)
+material_override = SubResource("StandardMaterial3D_criu7")
+use_collision = true
+size = Vector3(1000, 10.927, 1000)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Map/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.429016, 0)
+operation = 2
+size = Vector3(999, 10.069, 999)
+
+[node name="Player" parent="." instance=ExtResource("1_jv32c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.649379, 0)
+
+[node name="Enemy" parent="." instance=ExtResource("3_criu7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.99975, 0.568713, -7.11607)
+enemy1 = {
+"attack": 10,
+"health": 100,
+"speed": 100,
+"team": "enemy"
+}
+enemy2 = {
+"attack": 5,
+"health": 5,
+"speed": 10,
+"team": "enemy"
+}

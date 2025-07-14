@@ -1,11 +1,17 @@
 extends Node3D
 
+@onready var slot_1: Marker3D = $Enemies/Slot1
+@onready var slot_2: Marker3D = $Enemies/Slot2
+@onready var slot_3: Marker3D = $Enemies/Slot3
+@onready var slot_4: Marker3D = $Enemies/Slot4
+@onready var slot_5: Marker3D = $Enemies/Slot5
 
 var turn_queue: Array = []
 var current_unit: Character
 
 var enemies: Array[Node3D] = []
 var party: Array[Node3D] = []
+var enemy_slots := []
 var current_target_index: int = 0
 var current_target: Node3D = null
 var previous_target: Node3D = null
@@ -15,6 +21,7 @@ var attacking: bool = false
 
 
 func _ready() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	load_enemies()
 	load_party()
 	turn_queue = get_unit_order()
@@ -26,6 +33,7 @@ func _ready() -> void:
 	if enemies.size() > 0:
 		current_target_index = 0
 		current_target = enemies[0]
+	set_camera()
 	next_turn()
 
 
@@ -40,22 +48,28 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func load_enemies() -> void:
+	enemy_slots.append(slot_1)
+	enemy_slots.append(slot_2)
+	enemy_slots.append(slot_3)
+	enemy_slots.append(slot_4)
+	enemy_slots.append(slot_5)
+	
 	var scene = load("res://character/character.tscn")
-	var enemy = scene.instantiate()
-	add_child(enemy)
-	enemy.team = "enemy"
-	enemy.global_position = $Enemies/Slot2.global_position
+	var enemy_array = Global.enemy_array
+	var j = 0
 	
-	var enemy2 = scene.instantiate()
-	add_child(enemy2)
-	enemy2.team = "enemy"
-	enemy2.global_position = $Enemies/Slot4.global_position
+	for i in enemy_array:
+		var enemy = scene.instantiate()
+		add_child(enemy)
+		enemy.global_position = enemy_slots[j].global_position
+		enemy.team = i.team
+		enemy.health = i.health
+		enemy.attack = i.attack
+		enemy.speed = i.speed
+		j += 1
 	
-	var enemy3 = scene.instantiate()
-	add_child(enemy3)
-	enemy3.team = "enemy"
-	enemy3.global_position = $Enemies/Slot1.global_position
-	#print("spawned")
+	print("[DEBUG] Enemies loaded!")
+
 
 
 func load_party() -> void:
@@ -65,6 +79,8 @@ func load_party() -> void:
 	party_member.speed = 20
 	party_member.team = "party"
 	party_member.global_position = $Party/Slot2.global_position
+	
+	print("[DEBUG] Party loaded!")
 
 
 func next_turn():
@@ -129,18 +145,20 @@ func cycle_target(direction: int):
 
 
 func toggle_color(target, color) -> void:
-	var mesh = target.model
-	var material = mesh.get_active_material(0)
-	
-	material.albedo_color = color
+	if target != null:
+		var mesh = target.model
+		var material = mesh.get_active_material(0)
+		
+		material.albedo_color = color
 
 
 func attack(target) -> void:
 	attacking = true
+	await get_tree().create_timer(1.5).timeout
 	show_damage_number(current_unit.attack, target.global_position + Vector3.UP * 2)
 	target.health -= current_unit.attack
 	print(target.team + ": " + str(target.health))
-	await get_tree().create_timer(3).timeout
+	await get_tree().create_timer(1.5).timeout
 	attacking = false
 
 
@@ -160,3 +178,10 @@ func reset_all_unit_colors():
 	var all_units = get_tree().get_nodes_in_group("characters")
 	for unit in all_units:
 		toggle_color(unit, Color.WHITE)
+
+
+func set_camera():
+	var camera_rig = $CameraRig
+	camera_rig.global_position = party[0].global_position
+	camera_rig.global_position.y += 2
+	camera_rig.global_position.x += 2

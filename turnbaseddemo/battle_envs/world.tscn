@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyomn10mfpm0j"]
+[gd_scene load_steps=7 format=3 uid="uid://cyomn10mfpm0j"]
 
-[ext_resource type="Script" uid="uid://bu3wokvda3q1b" path="res://world.gd" id="1_f3sb7"]
+[ext_resource type="Script" uid="uid://bu3wokvda3q1b" path="res://battle_envs/world.gd" id="1_f3sb7"]
+[ext_resource type="Texture2D" uid="uid://sf0y6yr2jf2s" path="res://dev_textures/texture_05.png" id="2_na8yu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f3sb7"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -15,6 +16,10 @@ sky = SubResource("Sky_fj7yv")
 tonemap_mode = 2
 glow_enabled = true
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yynwj"]
+albedo_texture = ExtResource("2_na8yu")
+uv1_triplanar = true
+
 [node name="World" type="Node3D"]
 script = ExtResource("1_f3sb7")
 
@@ -27,6 +32,7 @@ shadow_enabled = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.48048, 0)
+material_override = SubResource("StandardMaterial3D_yynwj")
 use_collision = true
 size = Vector3(10, 1, 10)
 

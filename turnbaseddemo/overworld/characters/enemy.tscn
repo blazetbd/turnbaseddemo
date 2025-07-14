@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://cdkgkds7bpxpx"]
+
+[ext_resource type="Script" uid="uid://dueder5kjkb3n" path="res://overworld/characters/enemy.gd" id="1_qjvlm"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m0csh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qjvlm"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_r4d1e"]
+
+[node name="Enemy" type="CharacterBody3D" groups=["overworld_enemies"]]
+script = ExtResource("1_qjvlm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_m0csh")
+
+[node name="Visuals" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Visuals"]
+material_override = SubResource("StandardMaterial3D_qjvlm")
+mesh = SubResource("CapsuleMesh_r4d1e")
