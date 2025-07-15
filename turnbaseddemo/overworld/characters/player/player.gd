@@ -31,14 +31,6 @@ func _input(event: InputEvent) -> void:
 		visuals.rotate_y(deg_to_rad(event.relative.x*sens_horizontal))
 		camera_mount.rotate_x(deg_to_rad(-event.relative.y*sens_vertical))
 	
-	#if Input.is_action_just_pressed("lclick"):
-	#	print("yea")
-	#	animation_player.play("attack")
-	#	attacking = true
-	#	await animation_player.animation_finished
-	#	attacking = false
-	#	animation_player.play("RESET")
-		
 	if Input.is_action_pressed("exit"):
 		get_tree().quit()
 
