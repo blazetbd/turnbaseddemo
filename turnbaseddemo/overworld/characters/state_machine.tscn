@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bs2c6tt82isko"]
+
+[ext_resource type="Script" uid="uid://dr15tkybrctab" path="res://overworld/characters/state_machine.gd" id="1_i415v"]
+
+[node name="state_machine" type="Node"]
+script = ExtResource("1_i415v")

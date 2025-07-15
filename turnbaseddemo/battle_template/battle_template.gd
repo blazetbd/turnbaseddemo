@@ -169,7 +169,7 @@ func show_damage_number(damage: int, world_position: Vector3):
 	var camera := get_viewport().get_camera_3d()
 	var screen_pos = camera.unproject_position(world_position)
 
-	var ui := $Ui/DamageLayer  # or wherever you store the damage numbers
+	var ui := $Ui/DamageLayer 
 	ui.add_child(num)
 	num.start(damage, screen_pos)
 

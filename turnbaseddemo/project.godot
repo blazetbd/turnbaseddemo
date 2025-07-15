@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="TurnBasedDemo"
-run/main_scene="uid://cyomn10mfpm0j"
+run/main_scene="uid://clp4ouwy8euxd"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
