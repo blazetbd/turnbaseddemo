@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://clp4ouwy8euxd"]
+[gd_scene load_steps=10 format=3 uid="uid://clp4ouwy8euxd"]
 
 [ext_resource type="PackedScene" uid="uid://d2rbg8iloa6i3" path="res://overworld/characters/player/player.tscn" id="1_jv32c"]
 [ext_resource type="Texture2D" uid="uid://sf0y6yr2jf2s" path="res://dev_textures/texture_05.png" id="1_w0qnv"]
 [ext_resource type="PackedScene" uid="uid://cdkgkds7bpxpx" path="res://overworld/characters/enemy.tscn" id="3_criu7"]
+[ext_resource type="PackedScene" uid="uid://igjdot1hqw73" path="res://pickups/pickups.tscn" id="4_uniiq"]
+[ext_resource type="Resource" uid="uid://cds0uol4m5osw" path="res://data/items/potion.tres" id="5_a076f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jv32c"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -60,3 +62,7 @@ enemy2 = {
 "speed": 10,
 "team": "enemy"
 }
+
+[node name="Pickups" parent="." instance=ExtResource("4_uniiq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.37941, 0.837789, 0)
+item = ExtResource("5_a076f")

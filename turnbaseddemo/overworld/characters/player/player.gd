@@ -11,6 +11,7 @@ const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
 var attacking := false
+var inventory:Inventory = Inventory.new()
 
 @export var sens_horizontal = .2
 @export var sens_vertical = .2
@@ -19,6 +20,10 @@ var attacking := false
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	state_machine.init(self)
+	
+
+func on_item_picked_up(item:Item):
+	inventory.add_item(item)
 
 
 func _unhandled_input(event: InputEvent) -> void:
